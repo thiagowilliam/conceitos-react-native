@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import api from './service/api';
+import api from "./services/api";
 
 import {
   SafeAreaView,
@@ -12,26 +12,24 @@ import {
 } from "react-native";
 
 export default function App() {
-
   const [repositories, steRepositories] = useState([]);
 
   useEffect(() => {
-    api.get('repositories').then(response => {
+    api.get("repositories").then((response) => {
       steRepositories(response.data);
-    })
+    });
   }, []);
   async function handleLikeRepository(id) {
     const response = await api.post(`repositories/${id}/like`);
 
     const likedRepository = response.data;
 
-    const repositoriesUpdate = repositories.map(repository => {
+    const repositoriesUpdate = repositories.map((repository) => {
       if (repository.id === id) {
         return likedRepository;
       } else {
         return repository;
       }
-
     });
 
     steRepositories(repositoriesUpdate);
@@ -43,13 +41,13 @@ export default function App() {
       <SafeAreaView style={styles.container}>
         <FlatList
           data={repositories}
-          keyExtrator={repository => repository.id}
+          keyExtrator={(repository) => repository.id}
           renderItem={({ item: repository }) => (
             <View style={styles.repositoryContainer}>
               <Text style={styles.repository}>{repository.title}</Text>
 
               <View style={styles.techsContainer}>
-                {repository.techs.map(tech => (
+                {repository.techs.map((tech) => (
                   <Text key={tech} style={styles.tech}>
                     {tech}
                   </Text>
@@ -61,7 +59,7 @@ export default function App() {
                   style={styles.likeText}
                   testID={`repository-likes-${repository.id}`}
                 >
-                  {repository.likes} curtida{repository.likes > 1 ? 's' : ' '}
+                  {repository.likes} curtida{repository.likes > 1 ? "s" : " "}
                 </Text>
               </View>
 
